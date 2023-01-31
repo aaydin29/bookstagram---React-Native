@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, Text} from 'react-native';
 
 import styles from './Login.style';
 import Input from '../../../components/Input/Input';
@@ -18,6 +18,7 @@ const Login = ({navigation}) => {
           source={require('../../../assest/images/logo.png')}
         />
       </View>
+      <Text>BUNU TEKRAR KALDIRRRRR!!!!!!!!!!!!!!!!!!!!!!!</Text>
       <View style={styles.login_container}>
         <Input placeholder="Enter your e-mail..." name="envelope" size={17} />
         <Input

@@ -1,12 +1,14 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import colors from '../../styles/colors/colors';
+
+const deviceSize = Dimensions.get('window');
 
 const base_style = StyleSheet.create({
   button_container: {
     borderRadius: 7,
     padding: 10,
     marginTop: 15,
-    width: 150,
+    width: deviceSize.width / 1.2,
   },
   button_text: {
     fontWeight: 'bold',

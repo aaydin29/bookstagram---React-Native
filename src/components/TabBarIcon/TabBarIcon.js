@@ -2,10 +2,10 @@ import React from 'react';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const TabBarIcon = ({name}) => {
+const TabBarIcon = ({name, focused}) => {
   return (
     <View>
-      <Icon name={name} size={25} color="#3d342f" />
+      <Icon name={name} size={25} color={focused ? 'red' : '#3d342f'} />
     </View>
   );
 };

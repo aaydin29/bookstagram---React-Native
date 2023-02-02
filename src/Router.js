@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 
 const TabPages = () => {
   return (
-    <Tab.Navigator screenOptions={{tabBarShowLabel: false}}>
+    <Tab.Navigator screenOptions={TabBarScreenOptions}>
       <Tab.Screen name="Home" component={Home} options={HomeOptions} />
       <Tab.Screen name="Social" component={Social} options={SocialOptions} />
       <Tab.Screen
@@ -64,14 +64,26 @@ function Router() {
   );
 }
 
+const TabBarScreenOptions = ({route}) => ({
+  tabBarShowLabel: false,
+  tabBarInactiveBackgroundColor: 'white',
+  tabBarActiveBackgroundColor:
+    route.name === 'Home'
+      ? 'white'
+      : route.name === 'Profile'
+      ? 'white'
+      : route.name === 'Settings'
+      ? 'white'
+      : 'white',
+});
+
 const HomeOptions = () => ({
   headerShown: false,
   tabBarLabelStyle: {
     fontWeight: 'bold',
     fontSize: 15,
-    color: '#3d342f',
   },
-  tabBarIcon: () => <TabBarIcon name="home" />,
+  tabBarIcon: ({focused}) => <TabBarIcon name="home" focused={focused} />,
 });
 
 const SocialOptions = () => ({
@@ -81,7 +93,9 @@ const SocialOptions = () => ({
     fontSize: 15,
     color: '#3d342f',
   },
-  tabBarIcon: () => <TabBarIcon name="paper-plane" />,
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon name="paper-plane" focused={focused} />
+  ),
 });
 
 const FavoritesOptions = () => ({
@@ -89,9 +103,9 @@ const FavoritesOptions = () => ({
   tabBarLabelStyle: {
     fontWeight: 'bold',
     fontSize: 15,
-    color: '#3d342f',
+    color: 'white',
   },
-  tabBarIcon: () => <TabBarIcon name="heart" />,
+  tabBarIcon: ({focused}) => <TabBarIcon name="heart" focused={focused} />,
 });
 
 const ProfileOptions = () => ({
@@ -101,7 +115,7 @@ const ProfileOptions = () => ({
     fontSize: 15,
     color: '#3d342f',
   },
-  tabBarIcon: () => <TabBarIcon name="user" />,
+  tabBarIcon: ({focused}) => <TabBarIcon name="user" focused={focused} />,
 });
 
 export default Router;

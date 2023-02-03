@@ -14,7 +14,6 @@ export default StyleSheet.create({
     elevation: 7,
   },
   image: {
-    // flex: 1,
     width: 80,
     height: 120,
   },
@@ -22,8 +21,6 @@ export default StyleSheet.create({
     margin: 5,
     flex: 1,
     color: colors.lightpink,
-    // overflow: 'hidden',
-    // textOverflow: 'ellipsis',
     width: '100%',
     textAlign: 'center',
   },

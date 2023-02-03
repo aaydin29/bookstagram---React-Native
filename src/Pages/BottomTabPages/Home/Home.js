@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, ScrollView, TextInput} from 'react-native';
+import {View, Text, FlatList, ScrollView} from 'react-native';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './Home.style';
 import BookCard from '../../../components/cards/BookCard/BookCard';
@@ -15,7 +14,7 @@ const Philosophy =
 const History =
   'https://www.googleapis.com/books/v1/volumes?q=subject:history&maxResults=20&key=AIzaSyCwKBtsbYyjTxHZkxgAI5tgFRLOrvd2WLk';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [psychologyData, setPsychologyData] = useState([]);
   const [historyData, setHistoryData] = useState([]);
   const [politicalData, setPoliticalData] = useState([]);
@@ -39,23 +38,19 @@ const Home = () => {
     fetchdata();
   }, []);
 
-  function handleBookSelect() {}
+  const handleBookSelect = item => {
+    navigation.navigate('BookDetail', {item});
+  };
 
   const renderBooks = ({item}) => (
-    <BookCard volumeInfo={item.volumeInfo} onSelect={() => handleBookSelect} />
+    <BookCard
+      volumeInfo={item.volumeInfo}
+      onSelect={() => handleBookSelect(item)}
+    />
   );
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.input_container}>
-        <TextInput style={styles.input} placeholder="Search for book..." />
-        <Icon
-          style={styles.input_icon}
-          name="search"
-          size={25}
-          color="#3d342f"
-        />
-      </View>
       <Text style={styles.headers}>Psychology</Text>
       <View>
         <FlatList

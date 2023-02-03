@@ -1,7 +1,5 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet} from 'react-native';
 import colors from '../../../styles/colors/colors';
-
-const deviseSize = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {

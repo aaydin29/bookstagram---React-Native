@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FlashMessage from 'react-native-flash-message';
 import auth from '@react-native-firebase/auth';
+import TabBarIcon from './components/TabBarIcon/TabBarIcon';
 
 import Login from './Pages/AuthPages/Login';
 import Sign from './Pages/AuthPages/Sign';
@@ -12,7 +13,7 @@ import Home from './Pages/BottomTabPages/Home';
 import Social from './Pages/BottomTabPages/Social';
 import Favorites from './Pages/BottomTabPages/Favorites';
 import Profile from './Pages/BottomTabPages/Profile';
-import TabBarIcon from './components/TabBarIcon/TabBarIcon';
+import BookDetail from './Pages/BookDetail/BookDetail';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -58,6 +59,11 @@ function Router() {
         ) : (
           <Stack.Screen name="TabPages" component={TabPages} />
         )}
+        <Stack.Screen
+          options={BookDetailOptions}
+          name="BookDetail"
+          component={BookDetail}
+        />
       </Stack.Navigator>
       <FlashMessage position="top" />
     </NavigationContainer>
@@ -116,6 +122,13 @@ const ProfileOptions = () => ({
     color: '#3d342f',
   },
   tabBarIcon: ({focused}) => <TabBarIcon name="user" focused={focused} />,
+});
+
+const BookDetailOptions = () => ({
+  headerStyle: {
+    backgroundColor: '#ffead9',
+  },
+  headerShown: true,
 });
 
 export default Router;

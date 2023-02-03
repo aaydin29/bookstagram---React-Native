@@ -6,7 +6,7 @@ const BookCard = props => {
   return (
     <TouchableWithoutFeedback onPress={props.onSelect}>
       <View style={styles.container}>
-        {props.volumeInfo.imageLinks != undefined ? (
+        {props.volumeInfo.imageLinks !== undefined ? (
           <Image
             source={{uri: props.volumeInfo.imageLinks.thumbnail}}
             style={styles.image}

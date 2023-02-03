@@ -14,7 +14,7 @@ const BookCard = props => {
         ) : (
           <Image
             source={{
-              uri: 'https://www.kannemeinel.com/uploads/3/4/3/9/34391167/5133754_orig.jpg',
+              uri: 'https://i.pinimg.com/564x/1d/75/b9/1d75b954363bc000b9008ad05a5823e8.jpg',
             }}
             style={styles.image}
           />

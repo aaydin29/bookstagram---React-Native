@@ -1,10 +1,59 @@
 import React from 'react';
 import {View, Text, Image, ScrollView} from 'react-native';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+import {showMessage} from 'react-native-flash-message';
+
 import styles from './BookDetail.style';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const BookDetail = ({route}) => {
   const {item} = route.params;
+
+  const addReaded = () => {
+    const user = auth().currentUser;
+    if (user) {
+      const userId = user.uid;
+      database().ref(`users/${userId}/readed`).push({
+        book: item,
+      });
+    }
+  };
+
+  const addFavorites = () => {
+    const user = auth().currentUser;
+    if (user) {
+      const userId = user.uid;
+      database()
+        .ref(`users/${userId}/favorites`)
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val();
+          let isExists = false;
+          for (const key in data) {
+            if (data[key].book.id === item.id) {
+              isExists = true;
+              break;
+            }
+          }
+          if (isExists) {
+            showMessage({
+              message: 'Failed! This book is already in your favourites!',
+              type: 'danger',
+            });
+          } else {
+            database().ref(`users/${userId}/favorites`).push({
+              book: item,
+            });
+            showMessage({
+              message: 'The book has been added successfully favorites!',
+              type: 'success',
+            });
+          }
+        });
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.top_container}>
@@ -34,8 +83,18 @@ const BookDetail = ({route}) => {
         </View>
       </View>
       <View style={styles.icon_container}>
-        <Icon style={styles.icon1} name="share" size={30} />
-        <Icon style={styles.icon2} name="heart" size={30} />
+        <Icon
+          style={styles.icon1}
+          name="check"
+          size={30}
+          onPress={() => addReaded()}
+        />
+        <Icon
+          style={styles.icon2}
+          name="heart"
+          size={30}
+          onPress={() => addFavorites()}
+        />
       </View>
       <View style={styles.desc_container}>
         <Text style={styles.desc_title}>Description</Text>

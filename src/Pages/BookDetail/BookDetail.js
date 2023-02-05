@@ -14,9 +14,33 @@ const BookDetail = ({route}) => {
     const user = auth().currentUser;
     if (user) {
       const userId = user.uid;
-      database().ref(`users/${userId}/readed`).push({
-        book: item,
-      });
+      database()
+        .ref(`users/${userId}/readed`)
+        .once('value')
+        .then(snapshot => {
+          const data = snapshot.val();
+          let isExists = false;
+          for (const key in data) {
+            if (data[key].book.id === item.id) {
+              isExists = true;
+              break;
+            }
+          }
+          if (isExists) {
+            showMessage({
+              message: 'Failed! This book is already in your readed!',
+              type: 'danger',
+            });
+          } else {
+            database().ref(`users/${userId}/readed`).push({
+              book: item,
+            });
+            showMessage({
+              message: 'The book has been added readed successfully!',
+              type: 'success',
+            });
+          }
+        });
     }
   };
 
@@ -46,7 +70,7 @@ const BookDetail = ({route}) => {
               book: item,
             });
             showMessage({
-              message: 'The book has been added successfully favorites!',
+              message: 'The book has been added favorites successfully!',
               type: 'success',
             });
           }

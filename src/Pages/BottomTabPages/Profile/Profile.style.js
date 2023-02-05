@@ -24,9 +24,7 @@ export default StyleSheet.create({
     marginLeft: 15,
   },
   info_container: {
-    height: deviceSize.height / 6,
-    borderBottomWidth: 3,
-    borderRadius: 10,
+    height: deviceSize.height / 6.5,
   },
   edit_and_logout_container: {
     flexDirection: 'row',
@@ -51,7 +49,7 @@ export default StyleSheet.create({
   },
   user_container: {
     flexDirection: 'row',
-    marginLeft: 30,
+    marginLeft: 15,
     paddingTop: 20,
   },
   username: {
@@ -67,15 +65,17 @@ export default StyleSheet.create({
   menu_container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 15,
     padding: 5,
     marginHorizontal: 5,
-    borderWidth: 3,
-    borderRadius: 7,
   },
   menu_title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: colors.brown,
+    padding: 2,
+  },
+  menu_title_selected: {
+    borderBottomWidth: 4,
+    borderColor: colors.brown,
   },
 });

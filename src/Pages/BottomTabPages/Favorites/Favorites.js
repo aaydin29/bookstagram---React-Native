@@ -37,7 +37,7 @@ const Favorites = () => {
     <FavReadCard
       volumeInfo={item.volumeInfo}
       id={item.id}
-      handleDeleteFavorites={handleDeleteFavorites}
+      handleDelete={handleDeleteFavorites}
     />
   );
 

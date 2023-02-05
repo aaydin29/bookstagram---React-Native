@@ -4,7 +4,7 @@ import styles from './FavReadCard.style';
 import Icon from 'react-native-vector-icons/Feather';
 
 const FavReadCard = props => {
-  const {id, handleDeleteFavorites} = props;
+  const {id, handleDelete} = props;
 
   return (
     <View style={styles.container}>
@@ -32,7 +32,7 @@ const FavReadCard = props => {
           style={styles.icon}
           name="delete"
           size={30}
-          onPress={() => handleDeleteFavorites(id)}
+          onPress={() => handleDelete(id)}
         />
       </View>
     </View>

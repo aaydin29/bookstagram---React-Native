@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,26 +11,45 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+import {showMessage} from 'react-native-flash-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import styles from './Profile.style';
 import FavReadCard from '../../../components/cards/FavReadCard/FavReadCard';
 
-//Random photo for start- i will deleted that
-const photo1 =
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fD2B8MHxzZWFyY2h8Mnx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80';
-const photo2 =
-  'https://e1.pxfuel.com/desktop-wallpaper/207/201/desktop-wallpaper-black-blackheader-twitter-header-aesthetic-black-twitter-3464x1948-for-your-mobile-tablet-twitter-banner-thumbnail.jpg';
-
 const windowWidth = Dimensions.get('window').width;
 
 const Profile = () => {
+  const [isFirstVisit, setIsFirstVisit] = useState(true);
   const [favorites, setFavorites] = useState([]);
   const [readed, setReaded] = useState([]);
   const [sliderState, setSliderState] = useState({
     currentPage: 1,
   });
+  useEffect(() => {
+    //It allows a message to be given when the user first enters the profile section.
+    AsyncStorage.getItem('isProfileVisited').then(value => {
+      if (value === 'yes') {
+        setIsFirstVisit(false);
+      } else {
+        AsyncStorage.setItem('isProfileVisited', 'yes');
+      }
+    });
+  }, []);
 
   useEffect(() => {
+    //It allows a message to be given when the user first enters the profile section.
+    if (isFirstVisit) {
+      showMessage({
+        message:
+          'You can edit your profile by clicking the Edit Profile button.',
+        type: 'info',
+      });
+    }
+  }, [isFirstVisit]);
+
+  useEffect(() => {
+    //It is used to access the user's data in the database.
     const user = auth().currentUser;
     const userId = user.uid;
     database()
@@ -49,6 +68,7 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
+    //It is used to access the user's data in the database.
     const user = auth().currentUser;
     const userId = user.uid;
     database()
@@ -67,24 +87,28 @@ const Profile = () => {
   }, []);
 
   const switchPage = page => {
+    //It is used to make two different impressions inside a page.
     setSliderState({
       currentPage: page,
     });
   };
 
   const handleDeleteFavorites = async id => {
+    //It is used to delete data with this data ID.
     const user = auth().currentUser;
     const userId = user.uid;
     await database().ref(`users/${userId}/favorites/${id}`).remove();
   };
 
   const handleDeleteReaded = async id => {
+    //It is used to delete data with this data ID.
     const user = auth().currentUser;
     const userId = user.uid;
     await database().ref(`users/${userId}/readed/${id}`).remove();
   };
 
   const renderFavCard = ({item}) => (
+    //Using a different component to list the data in the Flatlist.
     <FavReadCard
       volumeInfo={item.volumeInfo}
       id={item.id}
@@ -93,6 +117,7 @@ const Profile = () => {
   );
 
   const renderReadCard = ({item}) => (
+    //Using a different component to list the data in the Flatlist.
     <FavReadCard
       volumeInfo={item.volumeInfo}
       id={item.id}
@@ -103,8 +128,14 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.image_container}>
-        <ImageBackground style={styles.banner_image} source={{uri: photo2}} />
-        <Image style={styles.profile_image} source={{uri: photo1}} />
+        <ImageBackground
+          style={styles.banner_image}
+          source={require('../../../assest/images/defaultBanner.png')}
+        />
+        <Image
+          style={styles.profile_image}
+          source={require('../../../assest/images/defaultProfile.png')}
+        />
       </View>
       <View style={styles.info_container}>
         <View style={styles.edit_and_logout_container}>

@@ -14,18 +14,34 @@ import database from '@react-native-firebase/database';
 import {showMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import styles from './Profile.style';
 import FavReadCard from '../../../components/cards/FavReadCard/FavReadCard';
+import EditProfileModal from '../../../components/modals/EditProfile/EditProfileModal';
 
 const windowWidth = Dimensions.get('window').width;
 
 const Profile = () => {
+  const [photos, setPhotos] = useState();
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(true);
   const [favorites, setFavorites] = useState([]);
   const [readed, setReaded] = useState([]);
   const [sliderState, setSliderState] = useState({
     currentPage: 1,
   });
+
+  useEffect(() => {
+    //It pull the photos from the database.
+    const user = auth().currentUser;
+    const userId = user.uid;
+    database()
+      .ref(`users/${userId}/photos`)
+      .on('value', snapshot => {
+        setPhotos(snapshot.val());
+      });
+  }, []);
+
   useEffect(() => {
     //It allows a message to be given when the user first enters the profile section.
     AsyncStorage.getItem('isProfileVisited').then(value => {
@@ -125,23 +141,44 @@ const Profile = () => {
     />
   );
 
+  const editProfileModal = () => {
+    setEditModalVisible(true);
+  };
+  const handleEditModalClose = () => {
+    setEditModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.image_container}>
-        <ImageBackground
-          style={styles.banner_image}
-          source={require('../../../assest/images/defaultBanner.png')}
-        />
-        <Image
-          style={styles.profile_image}
-          source={require('../../../assest/images/defaultProfile.png')}
-        />
+        {photos ? (
+          <Image style={styles.banner_image} source={{uri: photos.banner}} />
+        ) : (
+          <ImageBackground
+            style={styles.banner_image}
+            source={require('../../../assest/images/defaultBanner.png')}
+          />
+        )}
+        {photos ? (
+          <Image style={styles.profile_image} source={{uri: photos.profile}} />
+        ) : (
+          <Image
+            style={styles.profile_image}
+            source={require('../../../assest/images/defaultProfile.png')}
+          />
+        )}
       </View>
       <View style={styles.info_container}>
         <View style={styles.edit_and_logout_container}>
-          <TouchableOpacity style={styles.edit_button}>
+          <TouchableOpacity
+            onPress={editProfileModal}
+            style={styles.edit_button}>
             <Text style={styles.edit_text}>Edit Profile</Text>
           </TouchableOpacity>
+          <EditProfileModal
+            isVisible={editModalVisible}
+            onClose={handleEditModalClose}
+          />
           <Icon
             style={styles.logout_icon}
             name="logout"

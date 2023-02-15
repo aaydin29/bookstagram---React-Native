@@ -3,6 +3,7 @@ import {View, TextInput, Image, Text, TouchableOpacity} from 'react-native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
 import styles from './EditProfileModal.style';
 import Modal from 'react-native-modal';
 
@@ -12,6 +13,7 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
   const [age, setAge] = useState('');
 
   useEffect(() => {
+    //It pulls the user's photo data from the database and puts it into the photos state.
     const user = auth().currentUser;
     const userId = user.uid;
     database()
@@ -22,6 +24,7 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
   }, []);
 
   const addProfilePhoto = () => {
+    //It sends the photo uploaded by the user to the database.
     const user = auth().currentUser;
     const userId = user.uid;
     const options = {
@@ -33,9 +36,15 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
     };
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('user Cancelled');
+        showMessage({
+          message: 'Something went wrong.',
+          type: 'danger',
+        });
       } else if (response.errorCode) {
-        console.log('error');
+        showMessage({
+          message: 'Something went wrong.',
+          type: 'danger',
+        });
       } else {
         const path = response.assets[0].uri;
         database().ref(`users/${userId}/photos/profile`).set(path);
@@ -44,6 +53,7 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
   };
 
   const addBannerPhoto = () => {
+    //It sends the photo uploaded by the user to the database.
     const user = auth().currentUser;
     const userId = user.uid;
     const options = {
@@ -55,9 +65,15 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
     };
     launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('user Cancelled');
+        showMessage({
+          message: 'Something went wrong.',
+          type: 'danger',
+        });
       } else if (response.errorCode) {
-        console.log('error');
+        showMessage({
+          message: 'Something went wrong.',
+          type: 'danger',
+        });
       } else {
         const path = response.assets[0].uri;
         database().ref(`users/${userId}/photos/banner`).set(path);
@@ -66,6 +82,7 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
   };
 
   const onSend = () => {
+    //When the user clicks the save button, it sends the name and age information to the database.
     const user = auth().currentUser;
     const userId = user.uid;
     database()
@@ -75,7 +92,10 @@ const EditProfileModal = ({isVisible, onClose, userId}) => {
         age: age,
       })
       .then(() => {
-        console.log('Profile updated!');
+        showMessage({
+          message: 'Changes saved!',
+          type: 'success',
+        });
       });
     onClose();
   };

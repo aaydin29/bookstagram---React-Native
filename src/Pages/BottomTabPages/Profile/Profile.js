@@ -21,7 +21,7 @@ import EditProfileModal from '../../../components/modals/EditProfile/EditProfile
 
 const windowWidth = Dimensions.get('window').width;
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const [photos, setPhotos] = useState();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(true);
@@ -142,12 +142,18 @@ const Profile = () => {
     await database().ref(`users/${userId}/readed/${id}`).remove();
   };
 
+  const handleBookSelect = item => {
+    //When the book is selected, it goes to the detail page of the selected book.
+    navigation.navigate('BookDetail', {item});
+  };
+
   const renderFavCard = ({item}) => (
     //Using a different component to list the data in the Flatlist.
     <FavReadCard
       volumeInfo={item.volumeInfo}
       id={item.id}
       handleDelete={handleDeleteFavorites}
+      onPress={() => handleBookSelect(item)}
     />
   );
 
@@ -157,6 +163,7 @@ const Profile = () => {
       volumeInfo={item.volumeInfo}
       id={item.id}
       handleDelete={handleDeleteReaded}
+      onPress={() => handleBookSelect(item)}
     />
   );
 

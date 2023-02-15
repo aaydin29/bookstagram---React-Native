@@ -6,7 +6,7 @@ import database from '@react-native-firebase/database';
 import styles from './Favorites.style';
 import FavReadCard from '../../../components/cards/FavReadCard/FavReadCard';
 
-const Favorites = () => {
+const Favorites = ({navigation}) => {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
@@ -33,11 +33,17 @@ const Favorites = () => {
     await database().ref(`users/${userId}/favorites/${id}`).remove();
   };
 
+  const handleBookSelect = item => {
+    //When the book is selected, it goes to the detail page of the selected book.
+    navigation.navigate('BookDetail', {item});
+  };
+
   const renderFavCard = ({item}) => (
     <FavReadCard
       volumeInfo={item.volumeInfo}
       id={item.id}
       handleDelete={handleDeleteFavorites}
+      onPress={() => handleBookSelect(item)}
     />
   );
 

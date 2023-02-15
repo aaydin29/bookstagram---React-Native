@@ -6,8 +6,10 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import styles from './EditProfileModal.style';
 import Modal from 'react-native-modal';
 
-const EditProfileModal = ({isVisible, onClose, onSend, userId}) => {
+const EditProfileModal = ({isVisible, onClose, userId}) => {
   const [photos, setPhotos] = useState([]);
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
 
   useEffect(() => {
     const user = auth().currentUser;
@@ -63,6 +65,21 @@ const EditProfileModal = ({isVisible, onClose, onSend, userId}) => {
     });
   };
 
+  const onSend = () => {
+    const user = auth().currentUser;
+    const userId = user.uid;
+    database()
+      .ref(`users/${userId}/profile`)
+      .set({
+        name: name,
+        age: age,
+      })
+      .then(() => {
+        console.log('Profile updated!');
+      });
+    onClose();
+  };
+
   return (
     <Modal
       isVisible={isVisible}
@@ -73,7 +90,7 @@ const EditProfileModal = ({isVisible, onClose, onSend, userId}) => {
         <Text style={styles.header}>Edit Profile</Text>
         <View style={styles.photoContainer}>
           <TouchableOpacity onPress={addProfilePhoto}>
-            {photos ? (
+            {photos && photos.profile ? (
               <Image
                 style={styles.profilePhoto}
                 source={{uri: photos.profile}}
@@ -86,7 +103,7 @@ const EditProfileModal = ({isVisible, onClose, onSend, userId}) => {
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={addBannerPhoto}>
-            {photos ? (
+            {photos && photos.banner ? (
               <Image style={styles.bannerPhoto} source={{uri: photos.banner}} />
             ) : (
               <Image
@@ -101,6 +118,7 @@ const EditProfileModal = ({isVisible, onClose, onSend, userId}) => {
           <TextInput
             style={styles.inputs}
             placeholder="Enter your name here.."
+            onChangeText={setName}
           />
         </View>
         <View style={styles.ageContainer}>
@@ -108,6 +126,7 @@ const EditProfileModal = ({isVisible, onClose, onSend, userId}) => {
           <TextInput
             style={styles.inputs}
             placeholder="Enter your age here.."
+            onChangeText={setAge}
           />
         </View>
         <TouchableOpacity style={styles.saveButton} onPress={onSend}>

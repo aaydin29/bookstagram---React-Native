@@ -27,9 +27,28 @@ const Profile = () => {
   const [isFirstVisit, setIsFirstVisit] = useState(true);
   const [favorites, setFavorites] = useState([]);
   const [readed, setReaded] = useState([]);
+  const [userInfo, setUserInfo] = useState('');
   const [sliderState, setSliderState] = useState({
     currentPage: 1,
   });
+
+  useEffect(() => {
+    //It pull the user info from the database.
+    const user = auth().currentUser;
+    const userId = user.uid;
+
+    const onProfileUpdate = database()
+      .ref(`users/${userId}/profile`)
+      .on('value', snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          setUserInfo(data);
+        }
+      });
+
+    return () =>
+      database().ref(`users/${userId}/profile`).off('value', onProfileUpdate);
+  }, []);
 
   useEffect(() => {
     //It pull the photos from the database.
@@ -151,7 +170,7 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <View style={styles.image_container}>
-        {photos ? (
+        {photos && photos.banner ? (
           <Image style={styles.banner_image} source={{uri: photos.banner}} />
         ) : (
           <ImageBackground
@@ -159,7 +178,7 @@ const Profile = () => {
             source={require('../../../assest/images/defaultBanner.png')}
           />
         )}
-        {photos ? (
+        {photos && photos.profile ? (
           <Image style={styles.profile_image} source={{uri: photos.profile}} />
         ) : (
           <Image
@@ -187,8 +206,16 @@ const Profile = () => {
           />
         </View>
         <View style={styles.user_container}>
-          <Text style={styles.username}>Abdurrahman </Text>
-          <Text style={styles.userage}> / 25</Text>
+          {userInfo.name ? (
+            <Text style={styles.username}>{userInfo.name} </Text>
+          ) : (
+            <Text style={styles.username}>Name </Text>
+          )}
+          {userInfo.age ? (
+            <Text style={styles.userage}> / {userInfo.age}</Text>
+          ) : (
+            <Text style={styles.userage}> / Age</Text>
+          )}
         </View>
       </View>
       <View style={styles.menu_container}>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, TextInput, Image} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
@@ -11,12 +11,9 @@ import styles from './MessageModal.style';
 
 const MessageModal = ({isVisible, onClose}) => {
   const [text, setText] = useState('');
-  const [photo, setPhoto] = useState([]);
+  const [photo, setPhoto] = useState(null);
 
   const addPhoto = () => {
-    //It sends the photo uploaded by the user to the database.
-    const user = auth().currentUser;
-    const userId = user.uid;
     const options = {
       title: 'Titlee',
       storageOptions: {
@@ -26,47 +23,35 @@ const MessageModal = ({isVisible, onClose}) => {
     };
     launchImageLibrary(options, response => {
       if (response.didCancel) {
+        return;
+      }
+      if (response.errorCode) {
         showMessage({
-          message: 'Something went wrong.',
+          message: 'Error',
+          description: 'Error selecting photo',
           type: 'danger',
         });
-      } else if (response.errorCode) {
-        showMessage({
-          message: 'Something went wrong.',
-          type: 'danger',
-        });
+        return;
       } else {
         const path = response.assets[0].uri;
-        database().ref(`users/${userId}/shared/photo`).set(path);
+        setPhoto(path);
       }
     });
   };
 
-  useEffect(() => {
-    //It pulls the user's shared photo data from the database and puts it into the photo state.
-    const user = auth().currentUser;
-    const userId = user.uid;
-    database()
-      .ref(`users/${userId}/shared/photo`)
-      .on('value', snapshot => {
-        setPhoto(snapshot.val());
-      });
-  }, []);
-
-  const onSend = () => {
-    const user = auth().currentUser;
-    const userId = user.uid;
-    database()
-      .ref(`users/${userId}/shared/text`)
-      .set({
-        text,
-      })
-      .then(() => {
-        showMessage({
-          message: 'Successfully shared.',
-          type: 'success',
-        });
-      });
+  const onSend = async () => {
+    const userId = auth().currentUser.uid;
+    const postRef = database().ref(`users/${userId}/shared`).push();
+    const postId = postRef.key;
+    const post = {
+      id: postId,
+      text,
+      photo,
+      date: new Date().toISOString(),
+    };
+    await postRef.set(post);
+    setPhoto(null);
+    setText('');
     onClose();
   };
 
@@ -84,7 +69,12 @@ const MessageModal = ({isVisible, onClose}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.input_container}>
-          <TextInput placeholder="Enter your message here..." multiline />
+          <TextInput
+            placeholder="Enter your message here..."
+            multiline
+            value={text}
+            onChangeText={setText}
+          />
           {photo ? (
             <Image style={styles.sharing_photo} source={{uri: photo}} />
           ) : null}

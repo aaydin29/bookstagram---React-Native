@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import FloatingButton from '../../../components/FloatingButton/FloatingButton';
 import styles from './Social.style';
 import MessageModal from '../../../components/modals/MessageModal/MessageModal';
+import PostCard from '../../../components/cards/PostCard/PostCard';
 
 const Social = () => {
   const [photos, setPhotos] = useState();
@@ -44,6 +45,9 @@ const Social = () => {
             source={require('../../../assest/images/defaultProfile.png')}
           />
         )}
+      </View>
+      <View>
+        <PostCard />
       </View>
       <FloatingButton onPress={handleMessageModal} icon="paper-plane" />
       <MessageModal

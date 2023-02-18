@@ -41,13 +41,6 @@ const MessageModal = ({isVisible, onClose}) => {
 
   const onSend = async () => {
     const userId = auth().currentUser.uid;
-    // const postRef = database().ref(`users/${userId}/shared`).push();
-    // const post = {
-    //   text,
-    //   photo,
-    //   date: new Date().toISOString(),
-    // };
-    // await postRef.set(post);
     database().ref(`users/${userId}/shared`).push({
       text: text,
       photo: photo,

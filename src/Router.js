@@ -14,6 +14,7 @@ import Social from './Pages/BottomTabPages/Social';
 import Favorites from './Pages/BottomTabPages/Favorites';
 import Profile from './Pages/BottomTabPages/Profile';
 import BookDetail from './Pages/BookDetail/BookDetail';
+import OtherUserProfile from './Pages/OtherUserProfile/OtherUserProfile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -63,6 +64,11 @@ function Router() {
           options={BookDetailOptions}
           name="BookDetail"
           component={BookDetail}
+        />
+        <Stack.Screen
+          options={OtherUserProfileOptions}
+          name="OtherUserProfile"
+          component={OtherUserProfile}
         />
       </Stack.Navigator>
       <FlashMessage position="top" />
@@ -125,6 +131,13 @@ const ProfileOptions = () => ({
 });
 
 const BookDetailOptions = () => ({
+  headerStyle: {
+    backgroundColor: '#ffead9',
+  },
+  headerShown: true,
+});
+
+const OtherUserProfileOptions = () => ({
   headerStyle: {
     backgroundColor: '#ffead9',
   },

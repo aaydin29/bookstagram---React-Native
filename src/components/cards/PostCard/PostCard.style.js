@@ -2,6 +2,9 @@ import {StyleSheet} from 'react-native';
 import colors from '../../../styles/colors/colors';
 
 export default StyleSheet.create({
+  scroll_view: {
+    marginBottom: 60,
+  },
   container: {
     // borderWidth: 1,
     borderRadius: 7,

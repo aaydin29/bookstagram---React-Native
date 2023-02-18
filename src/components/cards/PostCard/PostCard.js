@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, ScrollView} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import database from '@react-native-firebase/database';
 import styles from './PostCard.style';
 import {compareDesc, formatDistanceToNow, parseISO} from 'date-fns';
+import {useNavigation} from '@react-navigation/native';
 
 const PostCard = () => {
   const [posts, setPosts] = useState([]);
@@ -22,6 +23,7 @@ const PostCard = () => {
               const post = user.shared[postId];
               post.name = user.profile.name;
               post.profile = {photo: user.photos.profile};
+              post.userId = userId;
               posts.push(post);
             }
           }
@@ -43,23 +45,29 @@ const PostCard = () => {
       });
   }, []);
 
+  const navigation = useNavigation();
+  const handleUserProfile = userId => {
+    navigation.navigate('OtherUserProfile', {userId: userId});
+  };
+
   return (
-    <ScrollView>
+    <ScrollView style={styles.scroll_view}>
       {posts.map(post => (
         <View key={post.text} style={styles.container}>
           <View style={styles.header_container}>
-            {post.profile ? (
-              <Image
-                style={styles.profile_image}
-                source={{uri: post.profile.photo}}
-              />
-            ) : (
-              <Image
-                style={styles.profile_image}
-                source={require('../../../assest/images/defaultProfile.png')}
-              />
-            )}
-
+            <TouchableOpacity onPress={() => handleUserProfile(post.userId)}>
+              {post.profile.photo ? (
+                <Image
+                  style={styles.profile_image}
+                  source={{uri: post.profile.photo}}
+                />
+              ) : (
+                <Image
+                  style={styles.profile_image}
+                  source={require('../../../assest/images/defaultProfile.png')}
+                />
+              )}
+            </TouchableOpacity>
             <View style={styles.name_date}>
               <Text style={styles.user_name}>{post.name}</Text>
               <Text style={styles.date}>

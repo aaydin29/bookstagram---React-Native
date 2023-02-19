@@ -77,7 +77,9 @@ const Home = ({navigation}) => {
           color="#9e9e9e"
         />
       </View>
-      <Text style={styles.headers}>Psychology</Text>
+      {searchText.length > 0 ? null : (
+        <Text style={styles.headers}>Psychology</Text>
+      )}
       <View>
         <FlatList
           horizontal
@@ -86,7 +88,9 @@ const Home = ({navigation}) => {
           keyExtractor={item => item.id}
         />
       </View>
-      <Text style={styles.headers}>History</Text>
+      {searchText.length > 0 ? null : (
+        <Text style={styles.headers}>History</Text>
+      )}
       <View>
         <FlatList
           horizontal
@@ -95,7 +99,9 @@ const Home = ({navigation}) => {
           keyExtractor={item => item.id}
         />
       </View>
-      <Text style={styles.headers}>Philosophy</Text>
+      {searchText.length > 0 ? null : (
+        <Text style={styles.headers}>Philosophy</Text>
+      )}
       <View>
         <FlatList
           horizontal
@@ -104,7 +110,9 @@ const Home = ({navigation}) => {
           keyExtractor={item => item.id}
         />
       </View>
-      <Text style={styles.headers}>Political</Text>
+      {searchText.length > 0 ? null : (
+        <Text style={styles.headers}>Political</Text>
+      )}
       <View>
         <FlatList
           horizontal

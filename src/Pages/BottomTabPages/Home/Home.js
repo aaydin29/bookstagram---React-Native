@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, ScrollView} from 'react-native';
+import {View, Text, FlatList, ScrollView, TextInput} from 'react-native';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from './Home.style';
 import BookCard from '../../../components/cards/BookCard/BookCard';
@@ -19,6 +20,7 @@ const Home = ({navigation}) => {
   const [historyData, setHistoryData] = useState([]);
   const [politicalData, setPoliticalData] = useState([]);
   const [philosophyData, setPhilosophyData] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     async function fetchdata() {
@@ -42,15 +44,39 @@ const Home = ({navigation}) => {
     navigation.navigate('BookDetail', {item});
   };
 
-  const renderBooks = ({item}) => (
-    <BookCard
-      volumeInfo={item.volumeInfo}
-      onSelect={() => handleBookSelect(item)}
-    />
-  );
+  const renderBooks = ({item}) => {
+    // If something is entered in the search bar and the title of the book does not contain this text, this book will not be rendered.
+    if (
+      searchText &&
+      !item.volumeInfo.title.toLowerCase().includes(searchText.toLowerCase())
+    ) {
+      return null;
+    }
+
+    return (
+      <BookCard
+        volumeInfo={item.volumeInfo}
+        onSelect={() => handleBookSelect(item)}
+      />
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.input_container}>
+        <TextInput
+          style={styles.searchBar}
+          onChangeText={text => setSearchText(text)}
+          value={searchText}
+          placeholder="Search books..."
+        />
+        <Icon
+          style={styles.input_icon}
+          name="search"
+          size={20}
+          color="#9e9e9e"
+        />
+      </View>
       <Text style={styles.headers}>Psychology</Text>
       <View>
         <FlatList

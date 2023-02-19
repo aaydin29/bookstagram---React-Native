@@ -141,6 +141,7 @@ const OtherUserProfileOptions = () => ({
   headerStyle: {
     backgroundColor: '#ffead9',
   },
+  headerTitle: 'Profile',
   headerShown: true,
 });
 

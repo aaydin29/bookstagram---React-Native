@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import styles from './FavReadCard.style';
-import Icon from 'react-native-vector-icons/Feather';
+import styles from './OtherFavReadCard.style';
 
-const FavReadCard = ({volumeInfo, id, handleDelete, onPress}) => {
+const OtherFavReadCard = ({book, volumeInfo, onPress}) => {
+  //   console.log('volumeInfo:', book);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
@@ -22,25 +23,21 @@ const FavReadCard = ({volumeInfo, id, handleDelete, onPress}) => {
             />
           )}
           <View style={styles.text_container}>
-            <Text style={styles.title}>
-              {volumeInfo ? volumeInfo.title : ''}
-            </Text>
-            {volumeInfo && volumeInfo.authors ? (
-              <Text style={styles.authors}>
-                {volumeInfo.authors.join(', ')}
-              </Text>
-            ) : null}
+            {book.title ? (
+              <Text style={styles.title}>{book.title}</Text>
+            ) : (
+              <Text style={styles.title}>nameless</Text>
+            )}
+            {book.authors ? (
+              <Text style={styles.authors}>{book.authors.join(', ')}</Text>
+            ) : (
+              <Text style={styles.authors}>Anonymous</Text>
+            )}
           </View>
-          <Icon
-            style={styles.icon}
-            name="delete"
-            size={30}
-            onPress={() => handleDelete(id)}
-          />
         </View>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default FavReadCard;
+export default OtherFavReadCard;

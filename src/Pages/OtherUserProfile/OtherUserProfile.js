@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import database from '@react-native-firebase/database';
 
-import FavReadCard from '../../components/cards/FavReadCard/FavReadCard';
+import OtherFavReadCard from '../../components/cards/OtherUserFavReadCard/OtherFavReadCard';
 import styles from './OtherUserProfile.style';
 
 const windowWidth = Dimensions.get('window').width;
@@ -29,14 +29,17 @@ const OtherUserProfile = ({route, navigation}) => {
     const userRef = database().ref(`users/${userId}`);
     userRef.on('value', snapshot => {
       setUser(snapshot.val());
-      console.log(snapshot.val());
 
       if (snapshot.val() && snapshot.val().favorites) {
         const favoriteBooksData = snapshot.val().favorites;
         const favoriteBooksArray = Object.keys(favoriteBooksData).map(
           bookId => ({
             id: bookId,
-            ...favoriteBooksData[bookId].book.volumeInfo,
+            volumeInfo: favoriteBooksData[bookId].book.volumeInfo,
+            title: favoriteBooksData[bookId].book.volumeInfo.title,
+            authors: favoriteBooksData[bookId].book.volumeInfo.authors,
+            thumbnail:
+              favoriteBooksData[bookId].book.volumeInfo.imageLinks.thumbnail,
           }),
         );
         setFavoriteBooks(favoriteBooksArray);
@@ -46,7 +49,10 @@ const OtherUserProfile = ({route, navigation}) => {
         const readBooksData = snapshot.val().readed;
         const readBooksArray = Object.keys(readBooksData).map(bookId => ({
           id: bookId,
-          ...readBooksData[bookId].book.volumeInfo,
+          volumeInfo: readBooksData[bookId].book.volumeInfo,
+          title: readBooksData[bookId].book.volumeInfo.title,
+          authors: readBooksData[bookId].book.volumeInfo.authors,
+          thumbnail: readBooksData[bookId].book.volumeInfo.imageLinks.thumbnail,
         }));
         setReadBooks(readBooksArray);
       }
@@ -54,46 +60,6 @@ const OtherUserProfile = ({route, navigation}) => {
 
     return () => userRef.off();
   }, [userId]);
-
-  //   useEffect(() => {
-  //     database()
-  //       .ref(`users/${userId}/favoriteBooks`)
-  //       .on('value', snapshot => {
-  //         const booksData = snapshot.val();
-  //         const books = [];
-
-  //         for (const bookId in booksData) {
-  //           const book = booksData[bookId];
-  //           books.push(book);
-  //         }
-  //         setFavoriteBooks(books);
-  //         // console.log(books);
-  //       });
-  //   }, [userId]);
-
-  //   useEffect(() => {
-  //     database()
-  //       .ref(`users/${userId}/readBooks`)
-  //       .on('value', snapshot => {
-  //         const booksData = snapshot.val();
-  //         const books = [];
-
-  //         for (const bookId in booksData) {
-  //           const book = booksData[bookId];
-  //           books.push(book);
-  //         }
-  //         setReadBooks(books);
-  //       });
-  //   }, [userId]);
-
-  //   useEffect(() => {
-  //     const userRef = database().ref(`users/${userId}`);
-  //     userRef.on('value', snapshot => {
-  //       setUser(snapshot.val());
-  //       console.log(snapshot.val());
-  //     });
-  //     return () => userRef.off();
-  //   }, [userId]);
 
   const switchPage = page => {
     //It is used to make two different impressions inside a page.
@@ -108,19 +74,19 @@ const OtherUserProfile = ({route, navigation}) => {
   };
 
   const renderFavCard = ({item}) => (
-    //Using a different component to list the data in the Flatlist.
-    <FavReadCard
+    <OtherFavReadCard
+      key={item.id}
+      book={item}
       volumeInfo={item.volumeInfo}
-      id={item.id}
       onPress={() => handleBookSelect(item)}
     />
   );
 
   const renderReadCard = ({item}) => (
-    //Using a different component to list the data in the Flatlist.
-    <FavReadCard
+    <OtherFavReadCard
+      key={item.id}
+      book={item}
       volumeInfo={item.volumeInfo}
-      id={item.id}
       onPress={() => handleBookSelect(item)}
     />
   );

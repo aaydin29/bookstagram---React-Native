@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ActivityIndicator} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
@@ -8,6 +8,7 @@ import FavReadCard from '../../../components/cards/FavReadCard/FavReadCard';
 
 const Favorites = ({navigation}) => {
   const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const user = auth().currentUser;
@@ -22,6 +23,7 @@ const Favorites = ({navigation}) => {
             ...data[key].book,
             id: key,
           });
+          setLoading(false);
         }
         setFavorites(favoriteBooks);
       });
@@ -50,7 +52,9 @@ const Favorites = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Favorites</Text>
-      {favorites.length === 0 ? (
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : favorites.length === 0 ? (
         <Text style={styles.ifMessage}>
           You don't have any favorite books yet...
         </Text>

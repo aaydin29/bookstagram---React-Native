@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, ScrollView} from 'react-native';
+import {View, Text, Image, ActivityIndicator} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,6 +12,7 @@ import PostCard from '../../../components/cards/PostCard/PostCard';
 const Social = () => {
   const [photos, setPhotos] = useState();
   const [messageModalVisible, setMessageModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     //It pull the photos from the database.
@@ -22,6 +23,7 @@ const Social = () => {
       .on('value', snapshot => {
         setPhotos(snapshot.val());
       });
+    setLoading(false);
   }, []);
 
   const handleMessageModal = () => {
@@ -46,9 +48,7 @@ const Social = () => {
           />
         )}
       </View>
-      <View>
-        <PostCard />
-      </View>
+      <View>{loading ? <ActivityIndicator size="large" /> : <PostCard />}</View>
       <FloatingButton onPress={handleMessageModal} icon="paper-plane" />
       <MessageModal
         isVisible={messageModalVisible}

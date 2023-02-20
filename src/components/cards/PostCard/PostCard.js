@@ -8,7 +8,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const PostCard = () => {
   const [posts, setPosts] = useState([]);
-  const [postLikes, setPostLikes] = useState(0);
 
   useEffect(() => {
     database()

@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, ScrollView, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  ScrollView,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -21,6 +28,7 @@ const Home = ({navigation}) => {
   const [politicalData, setPoliticalData] = useState([]);
   const [philosophyData, setPhilosophyData] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchdata() {
@@ -36,6 +44,7 @@ const Home = ({navigation}) => {
       await axios.get(Psychology).then(response => {
         setPsychologyData(response.data.items);
       });
+      setLoading(false);
     }
     fetchdata();
   }, []);
@@ -81,45 +90,61 @@ const Home = ({navigation}) => {
         <Text style={styles.headers}>Psychology</Text>
       )}
       <View>
-        <FlatList
-          horizontal
-          data={psychologyData}
-          renderItem={renderBooks}
-          keyExtractor={item => item.id}
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            horizontal
+            data={psychologyData}
+            renderItem={renderBooks}
+            keyExtractor={item => item.id}
+          />
+        )}
       </View>
       {searchText.length > 0 ? null : (
         <Text style={styles.headers}>History</Text>
       )}
       <View>
-        <FlatList
-          horizontal
-          data={historyData}
-          renderItem={renderBooks}
-          keyExtractor={item => item.id}
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            horizontal
+            data={historyData}
+            renderItem={renderBooks}
+            keyExtractor={item => item.id}
+          />
+        )}
       </View>
       {searchText.length > 0 ? null : (
         <Text style={styles.headers}>Philosophy</Text>
       )}
       <View>
-        <FlatList
-          horizontal
-          data={philosophyData}
-          renderItem={renderBooks}
-          keyExtractor={item => item.id}
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            horizontal
+            data={philosophyData}
+            renderItem={renderBooks}
+            keyExtractor={item => item.id}
+          />
+        )}
       </View>
       {searchText.length > 0 ? null : (
         <Text style={styles.headers}>Political</Text>
       )}
       <View>
-        <FlatList
-          horizontal
-          data={politicalData}
-          renderItem={renderBooks}
-          keyExtractor={item => item.id}
-        />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            horizontal
+            data={politicalData}
+            renderItem={renderBooks}
+            keyExtractor={item => item.id}
+          />
+        )}
       </View>
     </ScrollView>
   );

@@ -1,7 +1,7 @@
 # bookstagram App / React Native
 
 ### App Video
-https://user-images.githubusercontent.com/118750784/220168193-dc6f0fcc-c1a1-42f0-92ec-7510c7a1a347.mp4
+https://user-images.githubusercontent.com/118750784/220174202-a7016f2b-b94f-4914-9330-faa2caa513b3.mp4
 ___________________
 ### Description 
 - Users can register, log in and edit their own profile.

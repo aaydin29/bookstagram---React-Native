@@ -4,9 +4,11 @@ import database from '@react-native-firebase/database';
 import styles from './PostCard.style';
 import {compareDesc, formatDistanceToNow, parseISO} from 'date-fns';
 import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const PostCard = () => {
   const [posts, setPosts] = useState([]);
+  const [postLikes, setPostLikes] = useState(0);
 
   useEffect(() => {
     database()
@@ -18,12 +20,15 @@ const PostCard = () => {
         for (const userId in usersData) {
           const user = usersData[userId];
 
-          if ((user.shared, user.photos)) {
+          if (user.shared && user.photos) {
             for (const postId in user.shared) {
               const post = user.shared[postId];
               post.name = user.profile.name;
               post.profile = {photo: user.photos.profile};
               post.userId = userId;
+              post.likes = post.likes ?? 0;
+              post.isLiked = false;
+              post.id = postId;
               posts.push(post);
             }
           }
@@ -50,32 +55,60 @@ const PostCard = () => {
     navigation.navigate('OtherUserProfile', {userId: userId});
   };
 
+  const handleLike = post => {
+    const updatedPosts = posts.map(p => {
+      if (p.id === post.id) {
+        return {
+          ...p,
+          likes: p.likes + 1,
+          isLiked: true,
+        };
+      }
+      return p;
+    });
+    setPosts(updatedPosts);
+    database()
+      .ref(`users/${post.userId}/shared/${post.id}/likes`)
+      .set(post.likes + 1);
+  };
+
   return (
     <ScrollView style={styles.scroll_view}>
       {posts.map(post => (
         <View key={post.text} style={styles.container}>
           <View style={styles.header_container}>
-            <TouchableOpacity onPress={() => handleUserProfile(post.userId)}>
-              {post.profile.photo ? (
-                <Image
-                  style={styles.profile_image}
-                  source={{uri: post.profile.photo}}
-                />
-              ) : (
-                <Image
-                  style={styles.profile_image}
-                  source={require('../../../assest/images/defaultProfile.png')}
-                />
-              )}
-            </TouchableOpacity>
-            <View style={styles.name_date}>
-              <Text style={styles.user_name}>{post.name}</Text>
-              <Text style={styles.date}>
-                {formatDistanceToNow(parseISO(post.date), {addSuffix: true})}
-              </Text>
+            <View style={styles.header_info}>
+              <TouchableOpacity onPress={() => handleUserProfile(post.userId)}>
+                {post.profile.photo ? (
+                  <Image
+                    style={styles.profile_image}
+                    source={{uri: post.profile.photo}}
+                  />
+                ) : (
+                  <Image
+                    style={styles.profile_image}
+                    source={require('../../../assest/images/defaultProfile.png')}
+                  />
+                )}
+              </TouchableOpacity>
+              <View style={styles.name_date}>
+                <Text style={styles.user_name}>{post.name}</Text>
+                <Text style={styles.date}>
+                  {formatDistanceToNow(parseISO(post.date), {addSuffix: true})}
+                </Text>
+              </View>
             </View>
+            <TouchableOpacity
+              style={styles.likes_container}
+              onPress={() => handleLike(post)}>
+              <Icon
+                name="thumbs-up"
+                size={22}
+                color={post.isLiked ? 'blue' : '#3d342f'}
+              />
+              <Text style={styles.likes}>{post.likes}</Text>
+            </TouchableOpacity>
           </View>
-
           <Text style={styles.message}>{post.text}</Text>
           <View style={styles.shared_image_container}>
             {post.photo && (

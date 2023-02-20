@@ -19,6 +19,11 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 10,
   },
+  header_info: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   profile_image: {
     width: 50,
     height: 50,
@@ -48,5 +53,14 @@ export default StyleSheet.create({
     marginLeft: 10,
     marginTop: 10,
     alignContent: 'center',
+  },
+  likes_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  likes: {
+    fontSize: 17,
+    marginLeft: 5,
   },
 });

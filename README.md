@@ -26,3 +26,5 @@ ___________________
 - Modal
 - Vector Icons
 ___________________
+
+**Note:** Inside all functions, there is a comment line describing what that function does.

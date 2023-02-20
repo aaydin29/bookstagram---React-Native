@@ -31,6 +31,7 @@ const Home = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    //It pulls the book data from the API and adding it to the states.
     async function fetchdata() {
       await axios.get(Political).then(response => {
         setPoliticalData(response.data.items);
@@ -50,6 +51,7 @@ const Home = ({navigation}) => {
   }, []);
 
   const handleBookSelect = item => {
+    //Goes to the detail page of the selected book.
     navigation.navigate('BookDetail', {item});
   };
 
@@ -61,7 +63,6 @@ const Home = ({navigation}) => {
     ) {
       return null;
     }
-
     return (
       <BookCard
         volumeInfo={item.volumeInfo}

@@ -1,4 +1,5 @@
 export default function (errorCode) {
+  //Edits the error messages on the registration and login pages to show them with a flash message.
   switch (errorCode) {
     case 'auth/email-already-exists':
       return 'The provided email is already in use by an existing user. Each user must have a unique email.';

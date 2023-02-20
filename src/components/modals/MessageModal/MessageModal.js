@@ -14,6 +14,7 @@ const MessageModal = ({isVisible, onClose}) => {
   const [photo, setPhoto] = useState(null);
 
   const addPhoto = () => {
+    //Allows uploading photos to message modal.
     const options = {
       title: 'Titlee',
       storageOptions: {
@@ -40,6 +41,7 @@ const MessageModal = ({isVisible, onClose}) => {
   };
 
   const onSend = async () => {
+    //It sends the data and date you will share to the database when you press the share button.
     const userId = auth().currentUser.uid;
     database().ref(`users/${userId}/shared`).push({
       text: text,

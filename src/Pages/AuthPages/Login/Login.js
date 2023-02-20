@@ -20,6 +20,7 @@ const Login = ({navigation}) => {
   }
 
   async function handleFormSubmit(formValues) {
+    //It allows the user to log into the system with the information has registered.
     try {
       await auth().signInWithEmailAndPassword(
         formValues.usermail,

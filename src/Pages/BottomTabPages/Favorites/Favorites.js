@@ -11,6 +11,7 @@ const Favorites = ({navigation}) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    //It pulls the books that the user has added to favorites from the database and adds to the favorites state.
     const user = auth().currentUser;
     const userId = user.uid;
     database()
@@ -30,6 +31,7 @@ const Favorites = ({navigation}) => {
   }, []);
 
   const handleDeleteFavorites = async id => {
+    //It allows the user to delete the selected book from favorites.
     const user = auth().currentUser;
     const userId = user.uid;
     await database().ref(`users/${userId}/favorites/${id}`).remove();

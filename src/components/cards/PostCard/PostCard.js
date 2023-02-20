@@ -10,6 +10,7 @@ const PostCard = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
+    //It pulls and edits the data to be displayed on the post from the database, and adds the posts state.
     database()
       .ref('users/')
       .on('value', snapshot => {
@@ -33,6 +34,7 @@ const PostCard = () => {
           }
         }
         const sortedPosts = posts.sort((a, b) => {
+          //Sets the most recently shared to be on top.
           if (a.date === b.date) {
             if (a.name < b.name) {
               return -1;
@@ -55,6 +57,7 @@ const PostCard = () => {
   };
 
   const handleLike = post => {
+    //When the like button is clicked, it increases the number of likes and changes the color of the icon.
     const updatedPosts = posts.map(p => {
       if (p.id === post.id) {
         return {

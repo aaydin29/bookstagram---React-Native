@@ -11,6 +11,7 @@ const BookDetail = ({route}) => {
   const {item} = route.params;
 
   const addReaded = () => {
+    //Adds the book to readed.
     const user = auth().currentUser;
     if (user) {
       const userId = user.uid;
@@ -45,6 +46,7 @@ const BookDetail = ({route}) => {
   };
 
   const addFavorites = () => {
+    //Adds the book to favourites.
     const user = auth().currentUser;
     if (user) {
       const userId = user.uid;

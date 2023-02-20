@@ -26,6 +26,7 @@ const OtherUserProfile = ({route, navigation}) => {
   });
 
   useEffect(() => {
+    //It pulls user info and books that the user add to favorites and readed from the database.
     const userRef = database().ref(`users/${userId}`);
     userRef.on('value', snapshot => {
       setUser(snapshot.val());

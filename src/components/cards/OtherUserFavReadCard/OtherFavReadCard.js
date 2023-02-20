@@ -3,8 +3,6 @@ import {View, Text, Image, TouchableOpacity} from 'react-native';
 import styles from './OtherFavReadCard.style';
 
 const OtherFavReadCard = ({book, volumeInfo, onPress}) => {
-  //   console.log('volumeInfo:', book);
-
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
